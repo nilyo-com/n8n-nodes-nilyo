@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-nilyo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Nilyo community node for n8n: use your own LinkedIn, WhatsApp, Instagram, Telegram, Email and Calendar accounts from an n8n workflow or AI Agent, and trigger workflows on realtime account events.",
   "keywords": [
     "n8n-community-node-package",
