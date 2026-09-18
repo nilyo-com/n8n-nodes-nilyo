@@ -33,13 +33,13 @@ export class NilyoTrigger implements INodeType {
     webhooks: [{ name: "default", httpMethod: "POST", responseMode: "onReceived", path: "webhook" }],
     properties: [
       {
-        displayName: "Events",
+        displayName: 'Event Names or IDs',
         name: "events",
         type: "multiOptions",
         typeOptions: { loadOptionsMethod: "getEvents" },
-        default: DEFAULT_EVENTS,
+        default: [],
         required: true,
-        description: "Exact Nilyo/Unipile event types. Payloads are lightweight: use the IDs they carry with a Nilyo node to fetch the full chat, message or email.",
+        description: 'Exact Nilyo/Unipile event types. Payloads are lightweight: use the IDs they carry with a Nilyo node to fetch the full chat, message or email. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
       },
       {
         displayName: "Providers",
@@ -77,8 +77,9 @@ export class NilyoTrigger implements INodeType {
         try {
           const destination = await nilyoTool.call(this, "webhook_get_destination", { destination_id: data.destinationId });
           if (destination && (destination as IDataObject).request_url === this.getNodeWebhookUrl("default")) return true;
-        } catch {
-          // fall through: the destination was removed on the Nilyo side
+        } catch (error) {
+          // the destination was likely removed on the Nilyo side; log and fall through to re-create it
+          this.logger.error("Nilyo Trigger checkExists failed", { error });
         }
         delete data.destinationId;
         return false;
@@ -103,8 +104,9 @@ export class NilyoTrigger implements INodeType {
         if (!data.destinationId) return true;
         try {
           await nilyoTool.call(this, "webhook_delete_destination", { destination_id: data.destinationId });
-        } catch {
-          // already gone
+        } catch (error) {
+          // already gone on the Nilyo side; log and continue cleanup
+          this.logger.error("Nilyo Trigger delete failed", { error });
         }
         delete data.destinationId;
         return true;

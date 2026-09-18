@@ -7,7 +7,7 @@ import type {
   INodeType,
   INodeTypeDescription,
 } from "n8n-workflow";
-import { NodeConnectionTypes } from "n8n-workflow";
+import { NodeConnectionTypes, NodeOperationError } from "n8n-workflow";
 import { compact, nilyoRpc, nilyoTool, parseJsonField } from "./GenericFunctions";
 
 const show = (resource: string, operation?: string) => ({ show: { resource: [resource], ...(operation ? { operation: [operation] } : {}) } });
@@ -58,11 +58,11 @@ export class Nilyo implements INodeType {
         noDataExpression: true,
         options: [
           { name: "Account", value: "account" },
+          { name: "Any Nilyo Tool", value: "tool" },
+          { name: "Calendar", value: "calendar" },
+          { name: "Email", value: "email" },
           { name: "LinkedIn", value: "linkedin" },
           { name: "Messaging (WhatsApp, Instagram, Telegram)", value: "messaging" },
-          { name: "Email", value: "email" },
-          { name: "Calendar", value: "calendar" },
-          { name: "Any Nilyo Tool", value: "tool" },
         ],
         default: "linkedin",
       },
@@ -90,13 +90,13 @@ export class Nilyo implements INodeType {
         noDataExpression: true,
         displayOptions: show("linkedin"),
         options: [
-          { name: "Get Profile", value: "getProfile", action: "Get a LinkedIn profile", description: "From a profile URL, public identifier or provider user ID; returns the stable ID used by actions" },
-          { name: "Search People", value: "searchPeople", action: "Search LinkedIn people" },
-          { name: "Search Companies", value: "searchCompanies", action: "Search LinkedIn companies" },
-          { name: "List My Connections", value: "myConnections", action: "List my LinkedIn connections" },
-          { name: "List Invitations", value: "listInvitations", action: "List LinkedIn invitations" },
-          { name: "Send Invitation", value: "sendInvitation", action: "Send a LinkedIn invitation" },
-          { name: "Send Message", value: "sendMessage", action: "Send a LinkedIn message in an existing chat" },
+          { name: "Get Profile", value: "getProfile", action: "Get a profile", description: "From a profile URL, public identifier or provider user ID; returns the stable ID used by actions" },
+          { name: "List Invitations", value: "listInvitations", action: "List invitations" },
+          { name: "List My Connections", value: "myConnections", action: "List my connections" },
+          { name: "Search Companies", value: "searchCompanies", action: "Search companies" },
+          { name: "Search People", value: "searchPeople", action: "Search people" },
+          { name: "Send Invitation", value: "sendInvitation", action: "Send an invitation" },
+          { name: "Send Message", value: "sendMessage", action: "Send a message" },
         ],
         default: "getProfile",
       },
@@ -118,10 +118,10 @@ export class Nilyo implements INodeType {
         noDataExpression: true,
         displayOptions: show("messaging"),
         options: [
-          { name: "Send to Contact by Name", value: "sendToContact", action: "Send a message to a person by name", description: "Resolves the recipient from recent chats and contacts; sends only when exactly one person matches" },
           { name: "List Chats", value: "listChats", action: "List chats" },
           { name: "List Messages", value: "listMessages", action: "List messages of a chat" },
           { name: "Send Message", value: "sendMessage", action: "Send a message in an existing chat" },
+          { name: "Send to Contact by Name", value: "sendToContact", action: "Send a message to a person by name", description: "Resolves the recipient from recent chats and contacts; sends only when exactly one person matches" },
           { name: "Start Chat", value: "startChat", action: "Start a new chat with a provider user ID" },
         ],
         default: "sendToContact",
@@ -133,7 +133,8 @@ export class Nilyo implements INodeType {
       { displayName: "Chat ID", name: "chatId", type: "string", default: "", required: true, displayOptions: { show: { resource: ["messaging"], operation: ["listMessages", "sendMessage"] } } },
       { displayName: "Provider User ID", name: "usersIds", type: "string", default: "", required: true, description: "Exact provider user ID (from contacts/profile resolution), never a display name", displayOptions: show("messaging", "startChat") },
       { displayName: "Text", name: "text", type: "string", default: "", required: true, typeOptions: { rows: 4 }, displayOptions: { show: { resource: ["messaging"], operation: ["sendToContact", "sendMessage", "startChat"] } } },
-      { displayName: "Limit", name: "limit", type: "number", default: 50, typeOptions: { minValue: 1, maxValue: 250 }, displayOptions: { show: { resource: ["messaging"], operation: ["listChats", "listMessages"] } } },
+      { displayName: "Limit", name: "limit", type: "number",
+																																													description: 'Max number of results to return', default: 50, typeOptions: { minValue: 1, maxValue: 250 }, displayOptions: { show: { resource: ["messaging"], operation: ["listChats", "listMessages"] } } },
       { displayName: "Unread Only", name: "isUnread", type: "boolean", default: false, displayOptions: show("messaging", "listChats") },
       // Email
       {
@@ -151,7 +152,8 @@ export class Nilyo implements INodeType {
       },
       accountIdField("email", ["list", "read", "send"]),
       { displayName: "Folder ID", name: "folderId", type: "string", default: "", description: "Optional exact folder ID (email_list_folders); required for most IMAP mailboxes", displayOptions: show("email", "list") },
-      { displayName: "Limit", name: "limit", type: "number", default: 20, typeOptions: { minValue: 1, maxValue: 250 }, displayOptions: show("email", "list") },
+      { displayName: "Limit", name: "limit", type: "number",
+																																													description: 'Max number of results to return', default: 50, typeOptions: { minValue: 1, maxValue: 250 }, displayOptions: show("email", "list") },
       { displayName: "Email ID", name: "emailId", type: "string", default: "", required: true, displayOptions: show("email", "read") },
       { displayName: "To", name: "to", type: "string", default: "", required: true, description: "Comma-separated addresses", displayOptions: show("email", "send") },
       { displayName: "CC", name: "cc", type: "string", default: "", displayOptions: show("email", "send") },
@@ -184,17 +186,17 @@ export class Nilyo implements INodeType {
         type: "options",
         noDataExpression: true,
         displayOptions: show("tool"),
-        options: [{ name: "Call Tool", value: "call", action: "Call any Nilyo tool" }],
+        options: [{ name: "Call Tool", value: "call", action: 'Call any nilyo tool' }],
         default: "call",
       },
       {
-        displayName: "Tool",
+        displayName: 'Tool Name or ID',
         name: "toolName",
         type: "options",
         typeOptions: { loadOptionsMethod: "getTools" },
         default: "",
         required: true,
-        description: "Any of the Nilyo MCP tools (the list is loaded from your account)",
+        description: 'Any of the Nilyo MCP tools (the list is loaded from your account). Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
         displayOptions: show("tool", "call"),
       },
       jsonField("toolArguments", "Arguments (JSON)", "tool", ["call"], "Arguments matching the tool's input schema. Read the tool description in the dropdown or in the Nilyo agent guide."),
@@ -260,7 +262,7 @@ export class Nilyo implements INodeType {
           output.push({ json: { error: (error as Error).message }, pairedItem: { item: index } });
           continue;
         }
-        throw error;
+        throw new NodeOperationError(this.getNode(), error as Error, { itemIndex: index });
       }
     }
     return [output];

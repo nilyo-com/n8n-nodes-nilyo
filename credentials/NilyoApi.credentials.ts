@@ -3,6 +3,7 @@ import type { IAuthenticateGeneric, ICredentialTestRequest, ICredentialType, INo
 export class NilyoApi implements ICredentialType {
   name = "nilyoApi";
   displayName = "Nilyo API";
+  icon = "file:../nodes/Nilyo/nilyo.svg" as const;
   documentationUrl = "https://nilyo.com/setup-for-agents";
   properties: INodeProperties[] = [
     {
