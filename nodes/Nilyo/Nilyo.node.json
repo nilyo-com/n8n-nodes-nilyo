@@ -1,0 +1,43 @@
+{
+  "node": "n8n-nodes-nilyo.nilyo",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": ["Communication", "Sales", "Productivity"],
+  "subcategories": {
+    "Communication": ["Messaging", "Email"],
+    "Sales": ["Outreach", "Lead Generation"],
+    "Productivity": ["Calendar"]
+  },
+  "alias": [
+    "LinkedIn",
+    "Sales Navigator",
+    "LinkedIn Recruiter",
+    "WhatsApp",
+    "Instagram",
+    "Telegram",
+    "Gmail",
+    "Outlook",
+    "IMAP",
+    "Email",
+    "Calendar",
+    "Google Calendar",
+    "Inbox",
+    "Messaging",
+    "DM",
+    "Outreach",
+    "Prospecting",
+    "Invitation",
+    "Connection Request",
+    "AI Agent",
+    "MCP",
+    "Unipile"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      { "url": "https://nilyo.com/agents/n8n" }
+    ],
+    "credentialDocumentation": [
+      { "url": "https://nilyo.com/setup-for-agents" }
+    ]
+  }
+}

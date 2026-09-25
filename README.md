@@ -1,6 +1,6 @@
 # n8n-nodes-nilyo
 
-[![npm](https://img.shields.io/npm/v/n8n-nodes-nilyo.svg)](https://www.npmjs.com/package/n8n-nodes-nilyo) [![n8n community node](https://img.shields.io/badge/n8n-community%20node-ff6d5a)](https://docs.n8n.io/integrations/community-nodes/) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![npm](https://img.shields.io/npm/v/n8n-nodes-nilyo.svg)](https://www.npmjs.com/package/n8n-nodes-nilyo) [![n8n verified community node](https://img.shields.io/badge/n8n-verified%20community%20node-ff6d5a)](https://docs.n8n.io/integrations/community-nodes/installation/verified-install/) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Use **your own LinkedIn, WhatsApp, Instagram, Telegram, Email (Gmail, Outlook, any IMAP mailbox) and Calendar accounts** from an n8n workflow — or from the n8n AI Agent — through [Nilyo](https://nilyo.com), and start workflows on realtime account events (new message, new email, account disconnected).
 
@@ -13,8 +13,8 @@ No browser automation, no scraping: Nilyo connects your accounts once (secure ho
 
 ## Installation
 
+- **n8n Cloud**: this package is a **verified community node** — search *Nilyo* in the nodes panel and drop it on the canvas, nothing to install. (Verified Community Nodes must be enabled in the instance Admin Panel; restart the instance if the node does not appear yet.)
 - **Self-hosted n8n**: *Settings → Community Nodes → Install* → `n8n-nodes-nilyo`. Or `npm install n8n-nodes-nilyo` in your custom nodes directory.
-- **n8n Cloud**: install from the community nodes list once the package is verified by n8n.
 
 Requires n8n 1.0 or later (Node.js 18+).
 

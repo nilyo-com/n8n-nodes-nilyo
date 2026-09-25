@@ -1,0 +1,41 @@
+{
+  "node": "n8n-nodes-nilyo.nilyoTrigger",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": ["Communication", "Sales", "Productivity"],
+  "subcategories": {
+    "Communication": ["Messaging", "Email"],
+    "Sales": ["Outreach"],
+    "Productivity": ["Calendar"]
+  },
+  "alias": [
+    "LinkedIn",
+    "Sales Navigator",
+    "LinkedIn Recruiter",
+    "WhatsApp",
+    "Instagram",
+    "Telegram",
+    "Gmail",
+    "Outlook",
+    "IMAP",
+    "Email",
+    "Calendar",
+    "New Message",
+    "New Email",
+    "Inbox",
+    "Realtime",
+    "Webhook",
+    "Event",
+    "AI Agent",
+    "MCP",
+    "Unipile"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      { "url": "https://nilyo.com/guides/n8n-realtime-triggers" }
+    ],
+    "credentialDocumentation": [
+      { "url": "https://nilyo.com/setup-for-agents" }
+    ]
+  }
+}
