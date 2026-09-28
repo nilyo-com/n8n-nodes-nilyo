@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/n8n-nodes-nilyo.svg)](https://www.npmjs.com/package/n8n-nodes-nilyo) [![n8n verified community node](https://img.shields.io/badge/n8n-verified%20community%20node-ff6d5a)](https://docs.n8n.io/integrations/community-nodes/installation/verified-install/) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Use **your own LinkedIn, WhatsApp, Instagram, Telegram, Email (Gmail, Outlook, any IMAP mailbox) and Calendar accounts** from an n8n workflow — or from the n8n AI Agent — through [Nilyo](https://nilyo.com), and start workflows on realtime account events (new message, new email, account disconnected).
+Use **your own LinkedIn, WhatsApp, Instagram, Telegram, Email (Gmail, Outlook, any IMAP mailbox) and Calendar accounts** from an n8n workflow, or from the n8n AI Agent, through [Nilyo](https://nilyo.com), and start workflows on realtime account events (new message, new email, account disconnected).
 
 No browser automation, no scraping: Nilyo connects your accounts once (secure hosted sign-in, or a WhatsApp/Telegram QR code) and exposes them through one authenticated endpoint. This package wraps that endpoint in two nodes.
 
@@ -13,7 +13,7 @@ No browser automation, no scraping: Nilyo connects your accounts once (secure ho
 
 ## Installation
 
-- **n8n Cloud**: this package is a **verified community node** — search *Nilyo* in the nodes panel and drop it on the canvas, nothing to install. (Verified Community Nodes must be enabled in the instance Admin Panel; restart the instance if the node does not appear yet.)
+- **n8n Cloud**: this package is a **verified community node**: search *Nilyo* in the nodes panel and drop it on the canvas, nothing to install. (Verified Community Nodes must be enabled in the instance Admin Panel; restart the instance if the node does not appear yet.)
 - **Self-hosted n8n**: *Settings → Community Nodes → Install* → `n8n-nodes-nilyo`. Or `npm install n8n-nodes-nilyo` in your custom nodes directory.
 
 Requires n8n 1.0 or later (Node.js 18+).
@@ -35,11 +35,11 @@ The token only reaches the accounts connected to your Nilyo user, with the same 
 | **Messaging** (WhatsApp, Instagram, Telegram) | Send to Contact by Name · List Chats · List Messages · Send Message · Start Chat |
 | **Email** (Gmail, Outlook, IMAP) | List Messages · Read Message · Send Email |
 | **Calendar** (Google, Microsoft) | List Calendars · List Events |
-| **Any Nilyo Tool** | Call Tool — any of the 170+ Nilyo tools by name with JSON arguments (posts and comments, drafts, folders, attachments, voice notes, reactions, Sales Navigator, Recruiter, applicants, webhooks…). The tool catalogue with schemas: [nilyo.com/setup-for-agents](https://nilyo.com/setup-for-agents). |
+| **Any Nilyo Tool** | Call Tool: any of the 170+ Nilyo tools by name with JSON arguments (posts and comments, drafts, folders, attachments, voice notes, reactions, Sales Navigator, Recruiter, applicants, webhooks…). The tool catalogue with schemas: [nilyo.com/setup-for-agents](https://nilyo.com/setup-for-agents). |
 
 ### Trigger events
 
-`message.new`, `message.update`, `message.delete`, `message.receipt.read`, `email.new`, `email.update`, `email.delete`, `account.add`, `account.reconnect`, `account.remove`, `account.status.disconnected`, `account.status.running`, `account.status.errored`, `account.status.degraded`, `account.initial_sync.completed` and more — the trigger loads the current list from Nilyo. Filter by provider and, optionally, by account. Payloads are delivered directly from the connection layer to your n8n webhook URL; Nilyo only manages the subscription.
+`message.new`, `message.update`, `message.delete`, `message.receipt.read`, `email.new`, `email.update`, `email.delete`, `account.add`, `account.reconnect`, `account.remove`, `account.status.disconnected`, `account.status.running`, `account.status.errored`, `account.status.degraded`, `account.initial_sync.completed` and more. The trigger loads the current list from Nilyo. Filter by provider and, optionally, by account. Payloads are delivered directly from the connection layer to your n8n webhook URL; Nilyo only manages the subscription.
 
 ## Examples
 
@@ -61,7 +61,7 @@ Add the **Nilyo** node as a tool of the *AI Agent* node (resource *Any Nilyo Too
 
 ## Notes for workflow authors
 
-- **Exact IDs**: use *LinkedIn → Get Profile* to turn a profile URL into the stable provider ID before an invitation or a message; use *Messaging → Send to Contact by Name* to message a person without knowing chat IDs — it sends only when exactly one person matches and returns the candidates otherwise.
+- **Exact IDs**: use *LinkedIn → Get Profile* to turn a profile URL into the stable provider ID before an invitation or a message; use *Messaging → Send to Contact by Name* to message a person without knowing chat IDs: it sends only when exactly one person matches and returns the candidates otherwise.
 - **Several accounts of one provider**: pass the **Account ID** (from *Account → List Connected Accounts*). Nilyo never guesses which one to use.
 - **Next-step results instead of errors**: when an account must be connected or reconnected, or the subscription renewed, the node returns an item with `action` (`connect_account`, `reconnect_account`, `subscribe`, `choose_account`…) and a link. Route it to a Slack or email node for the person who owns the account.
 - **Pacing**: LinkedIn and Instagram are limited to about 100 actions per day per account, WhatsApp to 20 new conversations per day, and calls are serialized per account. A `PROVIDER_ACTION_LIMIT` error means the budget for today is used; do not retry in a loop.
@@ -73,4 +73,4 @@ Add the **Nilyo** node as a tool of the *AI Agent* node (resource *Any Nilyo Too
 - Source: <https://github.com/nilyo-com/n8n-nodes-nilyo> · Issues: <https://github.com/nilyo-com/n8n-nodes-nilyo/issues>
 - Privacy: <https://nilyo.com/privacy> · Support: <https://nilyo.com/support> · contact@nilyo.com
 
-Nilyo is operated by Unipile SAS. Licensed under MIT.
+Licensed under MIT.

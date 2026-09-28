@@ -3,11 +3,6 @@
   "nodeVersion": "1.0",
   "codexVersion": "1.0",
   "categories": ["Communication", "Sales", "Productivity"],
-  "subcategories": {
-    "Communication": ["Messaging", "Email"],
-    "Sales": ["Outreach"],
-    "Productivity": ["Calendar"]
-  },
   "alias": [
     "LinkedIn",
     "Sales Navigator",

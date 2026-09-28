@@ -28,7 +28,7 @@ export async function nilyoTool(this: Ctx, name: string, args: IDataObject): Pro
   if (result.isError) {
     const structured = result.structuredContent as IDataObject | undefined;
     const error = (structured?.error as IDataObject | undefined) ?? {};
-    throw new NodeOperationError(this.getNode(), String(error.message ?? text ?? "Nilyo tool failed"), { description: error.code ? `${error.code}${error.next_tools ? ` — next: ${(error.next_tools as string[]).join(", ")}` : ""}` : undefined });
+    throw new NodeOperationError(this.getNode(), String(error.message ?? text ?? "Nilyo tool failed"), { description: error.code ? `${error.code}${error.next_tools ? `, next: ${(error.next_tools as string[]).join(", ")}` : ""}` : undefined });
   }
   if (result.structuredContent !== undefined && result.structuredContent !== null) return result.structuredContent as IDataObject;
   try {
